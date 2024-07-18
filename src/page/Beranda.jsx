@@ -1,4 +1,4 @@
-import { Button, Col, Container, Dropdown, Form, Modal, OverlayTrigger, Row, Stack, Table, Tooltip } from "react-bootstrap"
+import { Button, Col, Container, Dropdown, Form, Modal, OverlayTrigger, Pagination, Row, Stack, Table, Tooltip } from "react-bootstrap"
 import Header from "../component/Header"
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -20,6 +20,8 @@ const Beranda = () => {
     const [searchTitle, setSearchTitle] = useState("");
     const [searchStatus, setSearchStatus] = useState("");
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     useEffect(() => {
         const userLoggedIn = localStorage.getItem('user');
         if (!userLoggedIn) {
@@ -28,15 +30,16 @@ const Beranda = () => {
     }, [navigate]);
 
     const getListData = () => {
-        TasksService.getList(token, sortBy, sortDir, searchStatus, searchTitle).then((res) => {
+        TasksService.getList(token, sortBy, sortDir, searchStatus, searchTitle, currentPage).then((res) => {
             setData(res.data)
             console.log(data)
+            setTotalPages(res.data.last_page);
         })
     }
 
     useEffect(() => {
         getListData()
-    }, [sortBy, sortDir])
+    }, [sortBy, sortDir, currentPage])
 
     const handleClose = () => {
         setShowDetail(false);
@@ -82,7 +85,7 @@ const Beranda = () => {
                 setDetailData({})
             }).catch((error) => {
                 console.log(error.response)
-                toast.error(error.response.status +" "+error.response.data.message)
+                toast.error(error.response.status + " " + error.response.data.message)
             })
 
             // setTimeout(() => {
@@ -111,6 +114,9 @@ const Beranda = () => {
         setShowDetail(true)
         setStatusModal(true)
     };
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage)
+    }
 
     return (
         <>
@@ -124,7 +130,7 @@ const Beranda = () => {
                 <Stack direction="horizontal" gap={3}>
                     <div className="p-2 row">
                         <div className="col col-md-5">
-                            <Form.Control type="text" placeholder="Judul" onChange={(e) => setSearchTitle(e.target.value)}/>
+                            <Form.Control type="text" placeholder="Judul" onChange={(e) => setSearchTitle(e.target.value)} />
                         </div>
                         <div className="col col-auto">
                             <Form.Select aria-label="Status" onChange={(e) => setSearchStatus(e.target.value)}>
@@ -219,6 +225,25 @@ const Beranda = () => {
                         )}
                     </tbody>
                 </Table>
+                <Pagination className="justify-content-center">
+                    <Pagination.Prev
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    />
+                    {[...Array(totalPages)].map((_, index) => (
+                        <Pagination.Item
+                            key={index + 1}
+                            onClick={() => handlePageChange(index + 1)}
+                            active={currentPage === index + 1}
+                        >
+                            {index + 1}
+                        </Pagination.Item>
+                    ))}
+                    <Pagination.Next
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    />
+                </Pagination>
             </Container>
             <Modal show={showDetail} centered>
                 <Modal.Header>

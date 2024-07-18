@@ -3,12 +3,12 @@ import axios from "axios";
 const API_URL = "http://127.0.0.1:8000/api/tasks";
 
 
-const getList = (token, sortBy, sortDir, searchStatus, searchTitle) => {
+const getList = (token, sortBy, sortDir, searchStatus, searchTitle, page) => {
     const headers = {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
     };
-    return axios.get(API_URL + `?sortBy=${sortBy}&dir=${sortDir}&status=${searchStatus}&title=${searchTitle}`,{
+    return axios.get(API_URL + `?page=${page}&sortBy=${sortBy}&dir=${sortDir}&status=${searchStatus}&title=${searchTitle}`,{
         headers: headers
       }).then(response => {
         return response.data;
