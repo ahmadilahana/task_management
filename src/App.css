@@ -1,0 +1,51 @@
+html, body{
+  height: 100%;
+}
+
+.form-container {
+  display: flex;
+  width: 100vw;
+  height: 90vh;
+}
+
+.form-box{
+  max-width: 360px;
+  padding: 30px;
+  box-shadow: rgb(0,0,0/16%) 1px 1px 10px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.form-box .atas{
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.form-box .tengah{
+  margin: -1px 0 -1px 0;
+  border-radius: 0;
+}
+
+.form-box .bawah{
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.custom-alert {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem; 
+}
+
+.alert-icon {
+  font-size: 1rem;
+}
+
+.alert-icon.me-2 {
+  margin-right: 0.5rem;
+}
+
+.table-style{
+  margin-top: 5px;
+}
